@@ -3,9 +3,20 @@ import serial
 
 comlist = serial.tools.list_ports.comports()
 
+def get_COM(command):
+    get_com = subprocess.Popen(command,universal_newlines=True,shell=True,
+                               stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    get_com = get_com.stdout.read()
+    get_com = get_com.split()
+    com_num = ''
+    for i in get_com:
+        if 'COM' in i:
+            com_num = i[3:4]
+    return com_num
+
 def initserial(com):
     console = serial.Serial(
-        port=f'COM{com}',
+        port=f'COM{str(com)}',
         baudrate=9600,
         parity="N",
         stopbits=1,
@@ -20,11 +31,14 @@ class Ciscoconfig:
     def __init__(self,monitor_num,device_name):
         self.monitor_num = monitor_num
 
+    def checkmode(self,main)
+
+
     def initconfigdev(self,main,passw):
         command = [
             b'enable /n',
             b'configure terminal /n',
-            b'Hostname ' +str(device_name).encode('utf-8')+str(self.mon_num).encode('utf-8')+b'/n',
+            b'Hostname ' +device_name.encode('utf-8')+str(self.mon_num).encode('utf-8')+b'/n',
             b'enable secret '+passw.encode('utf-8') + b'/n',
             b'service password-encryption /n',
             b'no logging console /n',
@@ -49,7 +63,7 @@ class Switch(Ciscoconfig):
     def __init__(self,monitor_num):
         super().__init__(monitor_num)
 
-    def configSW(self,main):
+    def PORTS(self,main):
 
 
         command = [
@@ -101,7 +115,7 @@ class Switch(Ciscoconfig):
         for i in command:
             main.write(i)
         
-    def configvlan(self,main):
+    def VLAN(self,main):
         command = [
             b'vlan 10 /n',
             b'name WirelessDATA /n',
@@ -135,16 +149,16 @@ class CUCM(Ciscoconfig):
         command = [
             b'configure terminal /n',
             b'dial-peer voice 1 pots /n',
-            b'destination-pattern ' +str(self.monitor_num).encode('utf-8')+b'00 /n',
+            b'destination-pattern ' +(self.monitor_num).encode('utf-8')+b'00 /n',
             b'port 0/0/0 /n',
             b'dial-peer voice 2 pots /n',
-            b'destination-pattern ' +str(self.monitor_num).encode('utf-8')+b'01 /n',
+            b'destination-pattern ' +(self.monitor_num).encode('utf-8')+b'01 /n',
             b'port 0/0/1 /n',
             b'dial-peer voice 3 pots /n',
-            b'destination-pattern ' +str(self.monitor_num).encode('utf-8')+b'02 /n',
+            b'destination-pattern ' +(self.monitor_num).encode('utf-8')+b'02 /n',
             b'port 0/0/2 /n',
             b'dial-peer voice 4 pots /n',
-            b'destination-pattern ' +str(self.monitor_num).encode('utf-8')+b'03 /n',
+            b'destination-pattern ' +(self.monitor_num).encode('utf-8')+b'03 /n',
             b'port 0/0/3 /n',
             b'end /n'
         ]
@@ -153,10 +167,10 @@ class CUCM(Ciscoconfig):
             main.write(i)
 
     def testcall(self,main,number):
-        main.write(b'csim start ' +str(number).encode('utf-8')+ b' /n')
+        main.write(b'csim start ' +(number).encode('utf-8')+ b' /n')
 
 
-    def IP_phones(self,main,mac1,mac2):
+    def ipphones(self,main,mac1,mac2):
         command = [
             b'configure terminal /n',
             b'no telephony-service /n',
@@ -165,30 +179,30 @@ class CUCM(Ciscoconfig):
             b'no auto-reg-ephone /n',
             b'max-ephone 5 /n',
             b'max-dn 20 /n',
-            b'ip source-address ' +str(self.cucm_ip)+ b' port 2000 /n',
+            b'ip source-address ' +(self.cucm_ip)+ b' port 2000 /n',
             b'create cnf-files /n'
             b'ephone-dn 1 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'11 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'11 /n',
             b'ephone-dn 2 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'22 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'22 /n',
             b'ephone-dn 3 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'33 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'33 /n',
             b'ephone-dn 4 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'44 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'44 /n',
             b'ephone-dn 5 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'55 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'55 /n',
             b'ephone-dn 6 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'66 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'66 /n',
             b'ephone-dn 7 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'77 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'77 /n',
             b'ephone-dn 8 /n',
-            b'number '+str(self.monitor_num).encode('utf-8')+b'88 /n',
+            b'number '+(self.monitor_num).encode('utf-8')+b'88 /n',
             b'ephone 1 /n',
-            b'mac-address '+str(main).encode('utf-8')+ b' /n',
+            b'mac-address '+(main).encode('utf-8')+ b' /n',
             b'button 1:2 2:3 3:2 4:4 /n',
             b'restart /n',
             b'ephone 2 /n',
-            b'mac-address '+str(main).encode('utf-8')+ b' /n',
+            b'mac-address '+(main).encode('utf-8')+ b' /n',
             b'button 1:5 2:6 3:7 4:8 /n',
             b'restart /n',
             b'ephone 1 /n',
@@ -207,6 +221,8 @@ class CUCM(Ciscoconfig):
         for i in command:
             main.write(i)
 
+    #add the IVR auto
+
 class Router(Ciscoconfig):
     def __init__(self,monitor_num):
         super().__init__(monitor_num)
@@ -218,18 +234,33 @@ class Router(Ciscoconfig):
             b'config terminal /n',
             b'int gi 0/0/1 /n',
             b'description OUTSIDE /n',
-            b'ip address '+str(self.outside_ip).encode('utf-8')+b' 255.255.255.0 /n',
+            b'ip address '+(self.outside_ip).encode('utf-8')+b' 255.255.255.0 /n',
             b'no shutdown /n',
             b'exit /n'
             b'int gi 0/0/0 /n',
             b'description INSIDE /n',
-            b'ip address '+str(self.inside_ip).encode('utf-8')+b' 255.255.255.0 /n',
+            b'ip address '+(self.inside_ip).encode('utf-8')+b' 255.255.255.0 /n',
             b'no shutdown /n',
             b'exit /n',
             b'end /n',
             b'configure terminal /n',
             b'interface loopback 0 /n',
-            b'ip address '+str(self.monitor_num).encode('utf-8')+b'.0.0.1 255.255.255.255 /n'
+            b'ip address '+(self.monitor_num).encode('utf-8')+b'.0.0.1 255.255.255.255 /n'
+        ]
+
+        for i in command:
+            main.write(i)
+
+    def nat(self,main):
+        command = [
+            b'conf t /n'
+            b'no access-list 8 permit 10.'+self.monitor_num.encode('utf-8')+b'0.0.255.255 /n',
+            b'int gi0/0/1 /n',
+            b'ip nat inside /n',
+            b'ip gi0/0/0 /n',
+            b'ip nat outside /n',
+            b'ip nat inside source list 8 /n',
+            b'end /n'
         ]
 
         for i in command:
