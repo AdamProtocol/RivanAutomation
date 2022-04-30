@@ -1,0 +1,29 @@
+{
+"switch_Hostname":"Leaf-11",
+"console_pass" : "pass",
+"enable_pass" : "pass",
+"Slash_24" : "255.255.255.0",
+"sw_vlan1":"10.11.1.4",
+"sw_vlan10":"10.11.10.4",
+"sw_vlan100":"10.11.100.4",
+"sw_gi0/1":"10.11.11.4",
+
+"exclude_v1":"10.11.1.1 10.11.1.100",
+"exclude_v10":"10.11.10.1 10.11.10.100",
+"exclude_v100":"10.11.100.1 10.11.100.100",
+
+"v1_network" : "10.11.1.0",
+"v10_network" : "10.11.10.0",
+"v100_network" : "10.11.100.0",
+
+"Cucm_Hostname" : "CUCM-11",
+"cucm_fa0/0" : "10.11.100.8",
+"ephone1_mac" :"",
+"ephone2_mac" :"",
+
+"Router_Hostname" : "Edge-11",
+"int_gi0/0/1" : "200.0.0.11",
+"int_gi0/0/0" : "10.11.11.1",
+"router_loopback" : "11.0.0.1 255.255.255.255"
+
+}
