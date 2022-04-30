@@ -1,5 +1,6 @@
 {
 "switch_Hostname":"Leaf-11",
+"pc_ip" : "10.11.1.10",
 "console_pass" : "pass",
 "enable_pass" : "pass",
 "Slash_24" : "255.255.255.0",
