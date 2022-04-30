@@ -1,0 +1,66 @@
+!To ensure telnet connectivity for the pc
+!THE SWITCH SHOULD HAVE THIS CONFIG
+enable
+configure terminal
+enable secret pass
+service password-encryption
+no logging console
+no ip domain-lookup
+
+line console 0
+password pass
+login
+exec-timeout 0 0
+line vty 0 14
+password pass
+login
+exec-timeout 0 0
+
+interface vlan 1
+no shutdown
+ip address 10.M.1.4 255.255.255.0
+description MGMTVLAN
+
+!THE CUCM SHOULD HAVE THIS CONFIG
+enable
+configure terminal
+enable secret pass
+service password-encryption
+no logging console
+no ip domain-lookup
+
+line console 0
+password pass
+login
+exec-timeout 0 0
+line vty 0 14
+password pass
+login
+exec-timeout 0 0
+
+int fa0/0
+no shutdown
+ip address 10.M.100.8 255.255.255.0
+
+!THE ROUTER SHOULD HAVE THIS CONFIG
+enable
+configure terminal
+enable secret pass
+service password-encryption
+no logging console
+no ip domain-lookup
+
+line console 0
+password pass
+login
+exec-timeout 0 0
+line vty 0 14
+password pass
+login
+exec-timeout 0 0
+
+int gi0/0/0 
+no shutdown
+ip address 10.M.M.1 255.255.255.0
+
+
